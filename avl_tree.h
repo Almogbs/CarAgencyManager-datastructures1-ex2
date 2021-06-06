@@ -47,6 +47,7 @@ namespace DataStructures {
 		Node<T>* 	iterator;
 		int			size;
 
+		T* recursiveSelect(Node<T>* root, int index);
 		Node<T>* buildRoot(T* sorted_keys, int left, int right, Node<T>* root_parent, int root_height);
 		void swapKeys(Node<T>* node1, Node<T>* node2);
 		void balance(Node<T>* node);
@@ -70,6 +71,7 @@ namespace DataStructures {
 		Node<T>* getMinNode();
 		Node<T>* getMaxNode();
 		Node<T>* getRoot();
+		T* select(int index);
 		int getSize();
 
 		template <class Operation>
@@ -199,6 +201,29 @@ T* AVLTree<T>::InOrderGetNext(){
 	iterator = result;
 	return iterator->get_key();	
 }
+template <class T>
+T* AVLTree<T>::select(int index){
+	if(index >= size) throw Assert();
+	Node<T>* dst = root;
+	return recursiveSelect(dst, index);
+}
+
+template <class T>
+T* AVLTree<T>::recursiveSelect(Node<T>* root, int index){
+	if(root->left != nullptr &&  root->get_left_rank() == index){
+		return &root->key;
+	}
+	else if(root->left != nullptr && root->get_left_rank() > index){
+		return recursiveSelect(root->left, index);
+	}
+	else if(root->left != nullptr && root->get_left_rank() < index){
+		return recursiveSelect(root->right, index - root->get_left_rank() -1);
+	}
+	else if(index == 0) return &root->key;
+	else return recursiveSelect(root->right, index - 1);
+	//throw Assert();
+	return &root->key;
+}
 
 template <class T>
 void AVLTree<T>::clear(){
@@ -213,8 +238,8 @@ Node<T>* AVLTree<T>::buildRoot(T* sorted_keys, int left, int right, Node<T>* roo
 	if(left > right) return nullptr;
 
 	int mid = (left + right)/2;
-	// the rank of the tree will be right - left - 1 (CHECK IT!!!)
-	Node<T>* root = new Node<T>(sorted_keys[mid], root_height, right - left - 1);
+	// the rank of the tree will be right - left + 1 (CHECK IT!!!)
+	Node<T>* root = new Node<T>(sorted_keys[mid], root_height, right - left + 1);
 	root->parent = root_parent;
 	root->left = buildRoot(sorted_keys, left, mid - 1, root, root_height - 1);
 	root->right = buildRoot(sorted_keys, mid + 1, right, root, root_height - 1);
@@ -259,6 +284,7 @@ void AVLTree<T>::insert(const T& key){
 	size++;
 	while(temp != nullptr){
 		temp_parent = temp;
+		temp_parent->rank += 1;
 		if (temp->key > key) temp = temp->left;
 		else temp = temp->right;
 	}
@@ -267,9 +293,14 @@ void AVLTree<T>::insert(const T& key){
 		//alloc and insert the new node in the right place
 		to_insert = new Node<T>(key);
 		to_insert->parent = temp_parent;
-	} catch(const std::bad_alloc &e){
+	} 
+	catch(const std::bad_alloc &e){
 		//change the tree as nothing happened
 		size--;
+		while (temp_parent != nullptr){
+			temp_parent->rank -= 1;
+			temp_parent = temp_parent->parent;
+		}
 
 		//throw further for user manegment
 		throw e;
@@ -358,6 +389,7 @@ void AVLTree<T>::remove(const T& key){
 	Node<T>* fix_height = to_delete_parent;
 	while(fix_height != nullptr){
 		fix_height->update_height();
+		fix_height->rank -= 1;
 		fix_height = fix_height->parent;
 	}
 
@@ -471,6 +503,8 @@ void AVLTree<T>::rotateRight(Node<T>* node){
 	Node<T>* B = node; 
 	Node<T>* Bparent = B->parent;
 	Node<T>* A = B->left;
+	B->rank = (A->right != nullptr ? A->right->rank : 0) + (B->right != nullptr ? B->right->rank : 0) + 1;
+	A->rank = B->rank + (A->left != nullptr ? A->left->rank : 0) + 1;
 	Node<T>* Aright = A->right;
 	if(Aright != nullptr) Aright->parent = B;
 	B->left = Aright;
@@ -490,6 +524,8 @@ void AVLTree<T>::rotateLeft(Node<T>* node){
 	Node<T>* A = node;
 	Node<T>* Aparent = A->parent;
 	Node<T>* B = A->right;
+	A->rank = (A->left != nullptr ? A->left->rank : 0) + (B->left != nullptr ? B->left->rank : 0) + 1;
+	B->rank = A->rank + (B->right != nullptr ? B->right->rank : 0) + 1;
 	Node<T>* Bleft = B->left;
 	if (Bleft != nullptr) Bleft->parent = A;
 	A->right = Bleft;

@@ -65,6 +65,17 @@ StatusType CDM2::UniteAgencies(int agencyID1, int agencyID2){
 }
 
 StatusType CDM2::GetIthSoldType(int agencyID, int i, int* res){
-    *res = 0;
+    if(i < 0 || !isLegalAgencyID(agencyID)){
+        return INVALID_INPUT;
+    }
+    else if (agencyID >= num_of_agencies){
+        return FAILURE;
+    }
+    AVLTree<CarTypeBySells>* sells_tree = agencies.find(agencyID)->types_by_sells;
+    if(i >= sells_tree->getSize()){
+        return FAILURE;
+    }
+    *res = sells_tree->select(i)->getID();
+    //*res = to_return.getID();
     return SUCCESS;
 }

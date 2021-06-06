@@ -29,7 +29,7 @@ StatusType UniteAgencies(void *DS, int agencyID1, int agencyID2){
 }
 
 StatusType GetIthSoldType(void *DS, int agencyID, int i, int* res){
-    if(DS == NULL){
+    if(DS == NULL || res == NULL){
         return INVALID_INPUT;
     }
     return ((CDM2 *)DS)->GetIthSoldType(agencyID, i, res);
