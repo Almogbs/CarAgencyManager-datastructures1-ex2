@@ -213,7 +213,8 @@ Node<T>* AVLTree<T>::buildRoot(T* sorted_keys, int left, int right, Node<T>* roo
 	if(left > right) return nullptr;
 
 	int mid = (left + right)/2;
-	Node<T>* root = new Node<T>(sorted_keys[mid], root_height);
+	// the rank of the tree will be right - left - 1 (CHECK IT!!!)
+	Node<T>* root = new Node<T>(sorted_keys[mid], root_height, right - left - 1);
 	root->parent = root_parent;
 	root->left = buildRoot(sorted_keys, left, mid - 1, root, root_height - 1);
 	root->right = buildRoot(sorted_keys, mid + 1, right, root, root_height - 1);
