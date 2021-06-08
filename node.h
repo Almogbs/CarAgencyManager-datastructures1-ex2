@@ -34,7 +34,7 @@ namespace DataStructures{
 		Node*     parent;
 		Node*     left;
 		Node*     right;
-        Node(const T& key, int height = LEAF_TREE_HEIGHT, int rank = LEAF_TREE_HEIGHT) : key(key), height(height), rank(rank){
+        Node(const T& key, int height = LEAF_TREE_HEIGHT, int rank = 1) : key(key), height(height), rank(rank){
             parent = nullptr;
             left = nullptr;
             right = nullptr;
@@ -63,7 +63,7 @@ namespace DataStructures{
 
     template <class T>
     void Node<T>::update_rank(){
-        rank = std::max(get_left_rank(), get_right_rank()) + 1;        //std good?
+        rank = get_left_rank() + get_right_rank() + 1;        //std good?
     }
 
     template <class T>
@@ -88,12 +88,12 @@ namespace DataStructures{
 
     template <class T>
     int Node<T>::get_left_rank(){
-        return (left == nullptr) ? EMPTY_TREE_HEIGHT : left->get_rank();
+        return (left == nullptr) ? LEAF_TREE_HEIGHT : left->get_rank();
     }
 
     template <class T>
     int Node<T>::get_right_rank(){
-        return (right == nullptr) ? EMPTY_TREE_HEIGHT : right->get_rank();
+        return (right == nullptr) ? LEAF_TREE_HEIGHT : right->get_rank();
     }
 
     template <class T>

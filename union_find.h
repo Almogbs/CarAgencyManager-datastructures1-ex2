@@ -112,6 +112,7 @@ template <class T, class K>
 void UnionFind<T, K>::unite(int key1, int key2){
     set<T, K>* set1 = find(key1);
     set<T, K>* set2 = find(key2);
+    if(set1 == set2) return;
     //key2 join to key1 
     if(set1->size > set2->size){
         set2->root->parent = set1->root;
@@ -150,13 +151,17 @@ AVLTree<T>* UnionFind<T, K>::getSortedCombainedIDTree(AVLTree<T>* t1, AVLTree<T>
     T* arr = new T[size1+size2];
     T* arr1 = new T[size1];
     T* arr2 = new T[size2];
-    arr1[0] = *t1->InOrderGetFirst();
-    for(int i=1; i<size1; i++){
-        arr1[i] = *t1->InOrderGetNext();
+    if(size1>0){
+        arr1[0] = *t1->InOrderGetFirst();
+        for(int i=1; i<size1; i++){
+            arr1[i] = *t1->InOrderGetNext();
+        }
     }
-    arr2[0] = *t2->InOrderGetFirst();
-    for(int i=1; i<size2; i++){
-        arr2[i] = *t2->InOrderGetNext();
+    if(size2>0){
+        arr2[0] = *t2->InOrderGetFirst();
+        for(int i=1; i<size2; i++){
+            arr2[i] = *t2->InOrderGetNext();
+        }
     }
     int counter1=0, counter2=0, total_counter = 0;
     while(size1>counter1 && size2>counter2){
@@ -166,7 +171,8 @@ AVLTree<T>* UnionFind<T, K>::getSortedCombainedIDTree(AVLTree<T>* t1, AVLTree<T>
     while(size1 > counter1) arr[total_counter++] = arr1[counter1++];
     while(size2 > counter2) arr[total_counter++] = arr2[counter2++];
     
-    AVLTree<T>* result = new AVLTree<T>(arr, size1+size2);
+    AVLTree<T>* result = (size1+size2 == 0) ? new AVLTree<T>() : new AVLTree<T>(arr, size1+size2);
+    //AVLTree<T>* result = new AVLTree<T>(arr, size1+size2);
     delete[] arr1;
     delete[] arr2;
     delete[] arr;
@@ -179,13 +185,17 @@ AVLTree<K>* UnionFind<T, K>::getSortedCombainedSalesTree(AVLTree<K>* t1, AVLTree
     K* arr = new K[size1+size2];
     K* arr1 = new K[size1];
     K* arr2 = new K[size2];
-    arr1[0] = *t1->InOrderGetFirst();
-    for(int i=1; i<size1; i++){
-        arr1[i] = *t1->InOrderGetNext();
+    if(size1>0){
+        arr1[0] = *t1->InOrderGetFirst();
+        for(int i=1; i<size1; i++){
+            arr1[i] = *t1->InOrderGetNext();
+        }
     }
-    arr2[0] = *t2->InOrderGetFirst();
-    for(int i=1; i<size2; i++){
-        arr2[i] = *t2->InOrderGetNext();
+    if(size2>0){
+        arr2[0] = *t2->InOrderGetFirst();
+        for(int i=1; i<size2; i++){
+            arr2[i] = *t2->InOrderGetNext();
+        }
     }
     int counter1=0, counter2=0, total_counter = 0;
     while(size1>counter1 && size2>counter2){
@@ -195,7 +205,8 @@ AVLTree<K>* UnionFind<T, K>::getSortedCombainedSalesTree(AVLTree<K>* t1, AVLTree
     while(size1 > counter1) arr[total_counter++] = arr1[counter1++];
     while(size2 > counter2) arr[total_counter++] = arr2[counter2++];
     
-    AVLTree<K>* result = new AVLTree<K>(arr, size1+size2);
+    AVLTree<K>* result = (size1+size2 == 0) ? new AVLTree<K>() : new AVLTree<K>(arr, size1+size2);
+    //AVLTree<T>* result = new AVLTree<T>(arr, size1+size2);
     delete[] arr1;
     delete[] arr2;
     delete[] arr;

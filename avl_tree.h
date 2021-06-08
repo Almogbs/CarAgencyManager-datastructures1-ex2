@@ -210,18 +210,26 @@ T* AVLTree<T>::select(int index){
 
 template <class T>
 T* AVLTree<T>::recursiveSelect(Node<T>* root, int index){
-	if(root->left != nullptr &&  root->get_left_rank() == index){
+	/*
+	if(root->left != nullptr &&  root->get_left_rank() == index - 1){
 		return &root->key;
 	}
-	else if(root->left != nullptr && root->get_left_rank() > index){
+	else if(root->left != nullptr && root->get_left_rank() >= index){
 		return recursiveSelect(root->left, index);
 	}
 	else if(root->left != nullptr && root->get_left_rank() < index){
 		return recursiveSelect(root->right, index - root->get_left_rank() -1);
 	}
-	else if(index == 0) return &root->key;
+	else if(index == root->get_rank() - 1) return &root->key;
 	else return recursiveSelect(root->right, index - 1);
 	//throw Assert();
+	return &root->key;
+	*/
+	if (root->get_left_rank() == index) return &root->key;
+	else if (root->get_left_rank() > index) return recursiveSelect(root->left, index);
+	else return recursiveSelect(root->right, index - root->get_left_rank() -1);
+
+	// should not reach here
 	return &root->key;
 }
 
@@ -238,7 +246,7 @@ Node<T>* AVLTree<T>::buildRoot(T* sorted_keys, int left, int right, Node<T>* roo
 	if(left > right) return nullptr;
 
 	int mid = (left + right)/2;
-	// the rank of the tree will be right - left + 1 (CHECK IT!!!)
+	// the rank of the tree will be: right - left + 1 (CHECK IT!!!)
 	Node<T>* root = new Node<T>(sorted_keys[mid], root_height, right - left + 1);
 	root->parent = root_parent;
 	root->left = buildRoot(sorted_keys, left, mid - 1, root, root_height - 1);
@@ -317,6 +325,7 @@ void AVLTree<T>::insert(const T& key){
 	Node<T>* fix_height = to_insert->parent;
 	while(fix_height != nullptr){
 		fix_height->update_height();
+		fix_height->update_rank();
 		fix_height = fix_height->parent;	
 	}
 
@@ -389,7 +398,8 @@ void AVLTree<T>::remove(const T& key){
 	Node<T>* fix_height = to_delete_parent;
 	while(fix_height != nullptr){
 		fix_height->update_height();
-		fix_height->rank -= 1;
+		//fix_height->rank -= 1;
+		fix_height->update_rank();
 		fix_height = fix_height->parent;
 	}
 
