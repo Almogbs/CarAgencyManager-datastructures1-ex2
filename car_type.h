@@ -17,10 +17,8 @@ namespace DataStructures {
         int getID() const;
         virtual bool operator==(const CarType&) const;
         virtual bool operator>(const CarType&) const;
-        //friend std::ostream& operator<<(std::ostream&, const CarType&);
     };
 
-    //std::ostream& operator<<(std::ostream&, const CarType&);
     bool operator!=(const CarType&, const CarType&);
     bool operator<=(const CarType&, const CarType&);
     bool operator>=(const CarType&, const CarType&);  

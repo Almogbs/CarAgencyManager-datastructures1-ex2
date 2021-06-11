@@ -4,7 +4,7 @@
 /**
 * Generic AVL Tree
 *
-* Implements an AVL Tree of generic type.
+* Implements an AVL Tree of generic type with Ranks.
 *
 * The following methods are available:
 *   getSize		            - Returns the size of the list
@@ -177,15 +177,14 @@ void AVLTree<T>::inOrder(Operation op){
 
 
 template <class T>
-//template <class Operation>
 T* AVLTree<T>::InOrderGetFirst(){
 	iterator = min_node;
 	if(iterator == nullptr) return nullptr;
 	return iterator->get_key();
 }
 
+// iterative inOrder
 template <class T>
-//template <class Operation>
 T* AVLTree<T>::InOrderGetNext(){
 	if(iterator == nullptr) return nullptr;
 	Node<T>* result = iterator->right;
@@ -210,21 +209,6 @@ T* AVLTree<T>::select(int index){
 
 template <class T>
 T* AVLTree<T>::recursiveSelect(Node<T>* root, int index){
-	/*
-	if(root->left != nullptr &&  root->get_left_rank() == index - 1){
-		return &root->key;
-	}
-	else if(root->left != nullptr && root->get_left_rank() >= index){
-		return recursiveSelect(root->left, index);
-	}
-	else if(root->left != nullptr && root->get_left_rank() < index){
-		return recursiveSelect(root->right, index - root->get_left_rank() -1);
-	}
-	else if(index == root->get_rank() - 1) return &root->key;
-	else return recursiveSelect(root->right, index - 1);
-	//throw Assert();
-	return &root->key;
-	*/
 	if (root->get_left_rank() == index) return &root->key;
 	else if (root->get_left_rank() > index) return recursiveSelect(root->left, index);
 	else return recursiveSelect(root->right, index - root->get_left_rank() -1);
@@ -246,7 +230,7 @@ Node<T>* AVLTree<T>::buildRoot(T* sorted_keys, int left, int right, Node<T>* roo
 	if(left > right) return nullptr;
 
 	int mid = (left + right)/2;
-	// the rank of the tree will be: right - left + 1 (CHECK IT!!!)
+	// the rank of the tree will be: right - left + 1 
 	Node<T>* root = new Node<T>(sorted_keys[mid], root_height, right - left + 1);
 	root->parent = root_parent;
 	root->left = buildRoot(sorted_keys, left, mid - 1, root, root_height - 1);

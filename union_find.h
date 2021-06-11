@@ -13,10 +13,11 @@ using std::cout;
 
 namespace DataStructures {
 
+    //set element declaration
     template <class T, class K>
     class set;
 
-///////////////////////////////////////////////////////////////////////////////////////////////////          NODE
+    // reverse tree node
     template <class T, class K>
     class node
     {
@@ -30,7 +31,7 @@ namespace DataStructures {
     template <class T, class K>
     node<T, K>::node(const T& element) : element(element), parent(nullptr), set_ptr(nullptr) {};
 
-///////////////////////////////////////////////////////////////////////////////////////////////////          SET
+    // set element
     template <class T, class K>  
     class set
     {
@@ -60,8 +61,8 @@ namespace DataStructures {
     template <class T, class K>
     set<T, K>::set() : size(1), index(0){};
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // main class - Union-Find Data Structure
     template <class T, class K>
     class UnionFind 
     {
@@ -76,7 +77,6 @@ namespace DataStructures {
             int getSize();
             void unite(int key1, int key2);
             set<T, K>* find(int index);
-            //AVLTree<T>* getTypesTree(int index);
             ~UnionFind();
     };
 }
@@ -90,7 +90,7 @@ int UnionFind<T, K>::getSize(){
     return size;
 }
 
-
+// push the element to the dynamic array
 template <class T, class K>
 void UnionFind<T, K>::makeSet(const T& element){
     node<T, K>* to_push_node = new node<T, K>(element);
@@ -100,14 +100,8 @@ void UnionFind<T, K>::makeSet(const T& element){
     size++;
 }
 
-/*
-template <class T, class K>
-AVLTree<T>* UnionFind<T>::getTypesTree(int index){
-    set<T>* owner_set = find(index);
-    return owner_set->types;
-}
-*/
 
+// unite two sets
 template <class T, class K>
 void UnionFind<T, K>::unite(int key1, int key2){
     set<T, K>* set1 = find(key1);
@@ -145,6 +139,7 @@ void UnionFind<T, K>::unite(int key1, int key2){
     }
 }
 
+// merging two avl trees into one
 template <class T, class K>
 AVLTree<T>* UnionFind<T, K>::getSortedCombainedIDTree(AVLTree<T>* t1, AVLTree<T>* t2){
     int size1 = t1->getSize(), size2 = t2->getSize();
@@ -179,6 +174,7 @@ AVLTree<T>* UnionFind<T, K>::getSortedCombainedIDTree(AVLTree<T>* t1, AVLTree<T>
     return result;
 }
 
+// merging two avl trees into one
 template <class T, class K>
 AVLTree<K>* UnionFind<T, K>::getSortedCombainedSalesTree(AVLTree<K>* t1, AVLTree<K>* t2){
     int size1 = t1->getSize(), size2 = t2->getSize();
@@ -214,7 +210,7 @@ AVLTree<K>* UnionFind<T, K>::getSortedCombainedSalesTree(AVLTree<K>* t1, AVLTree
 }
 
 
-
+// find the main set of given index
 template <class T, class K>
 set<T, K>* UnionFind<T, K>::find(int index){
     node<T, K>* element_in_group = (*groups.get(index))->root;
@@ -234,7 +230,7 @@ set<T, K>* UnionFind<T, K>::find(int index){
     return set_leader->set_ptr;
 }
 
-
+// d'tor
 template <class T, class K>
 UnionFind<T, K>::~UnionFind(){
     for(int i = 0; i < groups.size(); i++){

@@ -12,8 +12,8 @@
 
 class CDM2{
 private:
-    int num_of_agencies;
-    UnionFind<CarType, CarTypeBySells> agencies;
+    int                                 num_of_agencies;            // number of agencies (IDs) in the system
+    UnionFind<CarType, CarTypeBySells>  agencies;                   // main Data Structure - Union-Find
 public:
     CDM2();
     StatusType AddAgency();

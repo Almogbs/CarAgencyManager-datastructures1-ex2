@@ -37,6 +37,7 @@ namespace DataStructures {
     };
 }
 
+// c'tor
 template <class T>
 DynamicArray<T>::DynamicArray(int size) : max_size(size), curr_size(EMPTY) {
     arr = new T[max_size];
@@ -44,6 +45,7 @@ DynamicArray<T>::DynamicArray(int size) : max_size(size), curr_size(EMPTY) {
 
 template <class T>
 void DynamicArray<T>::push(const T& element){
+    // checks if array is full
     if(curr_size >=  max_size){
         resizeUp();
     }
@@ -64,6 +66,7 @@ T* DynamicArray<T>::get(int index){
     return arr + index;
 }
 
+//  multiply the size of the array
 template <class T>
 void DynamicArray<T>::resizeUp(){
     max_size *= FACTOR;

@@ -6,15 +6,6 @@
 *
 * Implements a Node of generic type.
 *
-* The following methods are available:
-*   size		                - Returns the size of the list
-*   contains	                - returns whether or not an element exists inside the list.
-*   insert	                    - Insert an element to the list.
-*   removeElement		        - Removes specified element from the list
-*   GetFirst	                - Sets the internal iterator to the first element in the list and returns it
-*   GetNext		                - Advances the internal iterator to the next key and returns it.
-*	getElement		            - Returns a pointer to same element within the list
-* 	LL_FOREACH	                - A macro for iterating over the list's elements.
 */
 
 #include "exceptions.h"
@@ -58,12 +49,12 @@ namespace DataStructures{
  
     template <class T>
     void Node<T>::update_height(){
-        height = std::max(get_left_height(), get_right_height()) + 1;        //std good?
+        height = std::max(get_left_height(), get_right_height()) + 1;       
     }
 
     template <class T>
     void Node<T>::update_rank(){
-        rank = get_left_rank() + get_right_rank() + 1;        //std good?
+        rank = get_left_rank() + get_right_rank() + 1;       
     }
 
     template <class T>

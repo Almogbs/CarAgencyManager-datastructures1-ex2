@@ -76,6 +76,5 @@ StatusType CDM2::GetIthSoldType(int agencyID, int i, int* res){
         return FAILURE;
     }
     *res = sells_tree->select(i)->getID();
-    //*res = to_return.getID();
     return SUCCESS;
 }
